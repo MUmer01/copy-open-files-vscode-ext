@@ -1,26 +1,86 @@
 {
-  "name": "copy-open-files",
-  "displayName": "Copy Open Files",
-  "description": "This will copy all open files and attach the relative path to the content as well. It's meant to quickly copy and paste into ChatGPT, Claude, and etc.",
-  "version": "0.0.5",
-  "publisher":"j-y-lau",
+  "name": "context-copier",
+  "displayName": "Context Copier",
+  "description": "Quickly copy or combine file paths and contents for use in AI prompts or documentation.",
+  "version": "1.0.0",
+  "publisher": "YourPublisherName",
   "license": "MIT",
   "engines": {
     "vscode": "^1.92.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Utilities"
   ],
-  "icon": "icon.png",
   "activationEvents": [
-    "onCommand:fileContentsCopier.copyFiles"
+    "onCommand:context-copier.copySelectedFiles",
+    "onCommand:context-copier.copyCurrentFile",
+    "onCommand:context-copier.copySelectedTab",
+    "onCommand:context-copier.copyAllTabs",
+    "onCommand:context-copier.aggregateSelectedTab",
+    "onCommand:context-copier.aggregateAllTabs"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "fileContentsCopier.copyFiles",
-        "title": "Copy All Open Files with Paths"
+        "command": "context-copier.copySelectedFiles",
+        "title": "Copy Path & Content (Context Copier)"
+      },
+      {
+        "command": "context-copier.copyCurrentFile",
+        "title": "Context Copier: Copy Path & Content of Active File"
+      },
+      {
+        "command": "context-copier.copySelectedTab",
+        "title": "Copy Path & Content of This Tab"
+      },
+      {
+        "command": "context-copier.copyAllTabs",
+        "title": "Copy Path & Content of All Open Tabs"
+      },
+      {
+        "command": "context-copier.aggregateSelectedTab",
+        "title": "Combine This Tab into New File"
+      },
+      {
+        "command": "context-copier.aggregateAllTabs",
+        "title": "Combine All Open Tabs into New File"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "context-copier.copySelectedFiles",
+          "when": "resourceIsFile",
+          "group": "9_cutcopypaste@1"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "context-copier.copySelectedTab",
+          "group": "2_copy@1"
+        },
+        {
+          "command": "context-copier.copyAllTabs",
+          "group": "2_copy@2"
+        },
+        {
+          "command": "context-copier.aggregateSelectedTab",
+          "group": "3_aggregate@1"
+        },
+        {
+          "command": "context-copier.aggregateAllTabs",
+          "group": "3_aggregate@2"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "context-copier.copyCurrentFile",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "editorTextFocus"
       }
     ]
   },
@@ -28,13 +88,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "vscode-test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/j-ylau/copy-open-files"
+    "lint": "eslint src --ext ts"
   },
   "devDependencies": {
     "@types/vscode": "^1.92.0",
